@@ -1,0 +1,33 @@
+html
+  head
+    title= title
+  body    
+    - var columns = [' ', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+    - var rows = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+
+    h2 Player B's board
+    table(border=2)
+      tr
+        each column in columns
+          th= column
+      - for (var i = 0; i < rows.length; i++) {
+        tr
+        - for (var j = 0; j < columns.length; j++) {
+            if j == 0
+                td= rows[i]
+            else
+              case board[i][j]                  
+                when 1
+                  td
+                    img(src="../images/ship.jpg" alt="ship")
+                when 2
+                  td
+                    img(src="./images/miss.jpg" alt="miss")
+                when 3
+                  td
+                    img(src="./images/hit.jpg" alt="hit")
+                default
+                  td
+                    img(src="./images/water.jpg" alt="water")
+        - }
+      - }   
