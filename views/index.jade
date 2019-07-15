@@ -1,29 +1,24 @@
+doctype html
 html
-  head
-    title= title
-  body    
-    - var columns = [' ', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
-    - var rows = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+    head
+        title !{title}
+    body
+        table(border='3',style="width:400px; height:400px; text-align:center")
+            thead
+              tr
+              for (var i = 0; i < 10; ++i) {
+                tr=i;
+              }
 
-    h2 Welcome to Battleship!
-    h4 What you can do:
-    p GET /boards/playerA - get player A's board
-    p GET /boards/playerB - get player B's board
-    p POST /boards/playerA/shoot - shoot to player A's board by providing the coordinates in json
-    p POST /boards/playerB/shoot - shoot to player B's board by providing the coordinates in json
-    p PUT /boards/playerA - change the whole board of player A by providing info about each cell (0: water, 1: ship)
-    p PUT /boards/playerB - change the whole board of player B by providing info about each cell (0: water, 1: ship)
- 
-    table(border=2)
-      tr
-        each column in columns
-          th(width="20px")= column
-      - for (var i = 0; i < rows.length; i++) {
-        tr
-        - for (var j = 0; j < columns.length; j++) {
-            if j == 0
-                td= rows[i]
-            else
-              td
-        - }
-      - }
+            tbody
+            for object in game.board
+                tr
+                for cell in object
+                    if cell == 0
+                        td= '~' 
+                    if cell == 1
+                        td= 'O'
+                    if cell == 2
+                        td= '#'
+                    if cell == 3
+                        td= 'X'

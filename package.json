@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
-  "author": "Savanya Brigitta <brigitta.savanya.js@gmail.com>, GP <pap133@gmail.com>,",
+  "author": "Gergely Pap <pap133@gmail.com>, Savanya Brigitta <brigitta.savanya.js@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
@@ -13,6 +13,9 @@
     "jade": "^1.11.0",
     "mongodb": "^3.2.7"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "mocha": "^6.1.4",
+    "supertest": "^4.0.2"
+  },
   "description": ""
 }
