@@ -4,15 +4,17 @@ const game = require('./helpers/BoardHelper');
 const bodyParser = require('body-parser');
 const MongoClient = require('mongodb').MongoClient;
 const url = 'mongodb://localhost:27017';
-const http = require('http');
+var cors = require('cors');
+
 let db;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 app.set('view engine', 'jade');
 
 MongoClient.connect(url, (err, client) => {
-  db = client.db('bsDB');
+  db = client.db('battleship');
   if (err) return console.log(err);
   app.listen(3000, () => {
     console.log('Running on port on 3000...');
@@ -21,62 +23,81 @@ MongoClient.connect(url, (err, client) => {
 });
 
 app.get('/boards/playerA', (req, res) => {
-  db.collection('playerA').findOne()
-    .then((boardA) => { res.json(boardA) });
+  db.collection('boards').findOne({ "player": "A" })
+    .then((boardA) => { res.json(boardA.board) });
 });
 
 app.get('/boards/playerB', (req, res) => {
-  db.collection('playerB').findOne()
-    .then((boardB) => { res.json(boardB) });
+  db.collection('boards').findOne({ "player": "B" })
+    .then((boardB) => { res.json(boardB.board) });
 });
 
 app.post('/boards/playerA/shoot', (req, res) => {
-  let shotted = game.shoot(req.body.x, req.body.y, game.boardA);
-  db.collection('playerA').updateOne({
-    $set: {
-      "BoardA": game.boardA
-    }
-  }).then(() => {
-    if (shotted === 3) {
-      res.json({ "hit": true });
-    } else {
-      res.json({ "hit": false });
-    }
-  });
+  db.collection('boards').findOne({ "player": "B" })
+    .then((boardB) => {
+      let shotted = game.shoot(req.body.x, req.body.y, boardB.board);
+      db.collection('boards').updateOne(
+        { "player": "B" },
+        {
+          $set: {
+            "board": boardB.board
+          }
+        }).then(() => {
+          if (shotted) {
+            res.json({ "Was hit?": true });
+          } else {
+            res.json({ "Was hit?": false });
+          }
+        });
+    });
 });
 
 app.post('/boards/playerB/shoot', (req, res) => {
-  let shotted = game.shoot(req.body.x, req.body.y, game.boardB);
-  db.collection('playerB').updateOne({
-    $set: {
-      "boardB": game.boardB
-    }
-  }).then(() => {
-    if (shotted === 3) {
-      res.json({ "hit": true });
-    } else {
-      res.json({ "hit": false });
-    }
-  });
+  db.collection('boards').findOne({ "player": "A" })
+    .then((boardA) => {
+      let shotted = game.shoot(req.body.x, req.body.y, boardA.board);
+      db.collection('boards').updateOne(
+        { "player": "A" },
+        {
+          $set: {
+            "board": boardA.board
+          }
+        }).then(() => {
+          if (shotted) {
+            res.json({ "Was hit?": true });
+          } else {
+            res.json({ "Was hit?": false });
+          }
+        });
+    });
 });
 
 app.put('/boards/playerA', (req, res) => {
-  game.update(req.body.board, game.boardA);
-  db.collection('playerA').updateOne({
-    $set: {
-      "BoardA": game.boardA
-    }
-  }
-  ).then(() => res.json(game.boardA));
+  let boardA = req.body.board;
+  console.log(boardA);
+  db.collection('boards').updateOne(
+    { "player": "A" },
+    {
+      $set: {
+        "board": boardA
+      }
+    }).then(() =>
+      db.collection('boards').findOne({ "player": "A" })
+        .then((boardA) => { res.json(boardA.board) }));
 });
 
 app.put('/boards/playerB', (req, res) => {
-  game.update(req.body.board, game.boardA);
-  db.collection('playerB').updateOne({
-    $set: {
-      "BoardB": game.boardB
-    }
-  }).then(() => res.json(game.boardA));
+  let boardB = req.body.board;
+  console.log(boardB);
+  db.collection('boards').updateOne(
+    { "player": "B" },
+    {
+      $set: {
+        "board": boardB
+      }
+    }).then(() =>
+      db.collection('boards').findOne({ "player": "B" })
+        .then((boardB) => { res.json(boardB.board) }));
 });
 
 module.exports = app;

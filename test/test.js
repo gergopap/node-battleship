@@ -1,6 +1,8 @@
 const request = require('supertest');
 const app = require('../index');
 
+
+
 describe('test GET /boards/playerA', () => {
   it('should return Board A', function (done) {
     request(app)
@@ -51,7 +53,7 @@ describe('test POST /boards/playerB/shoot', () => {
   });
 });
 
-let board = {
+let sampleBoard = {
   Board: [
     [1, 1, 0, 1, 0, 0, 0, 0, 0, 1],
     [0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
@@ -70,7 +72,7 @@ describe('test PUT test /boards/playerA', () => {
   it('should update all Board A', (done) => {
     request(app)
       .put('//boards/playerA')
-      .send(board)
+      .send(sampleBoard)
       .expect('Content-type', /json/)
       .expect(200)
       .end(function (err, res) {
@@ -83,7 +85,7 @@ describe('test PUT test /boards/playerB', () => {
   it('should update all Board B', (done) => {
     request(app)
       .put('//boards/playerB')
-      .send(board)
+      .send(sampleBoard)
       .expect('Content-type', /json/)
       .expect(200)
       .end(function (err, res) {

@@ -12,28 +12,22 @@ const generateBoard = () => {
 let boardA = generateBoard();
 let boardB = generateBoard();
 
-const update = (newBoard, actualBoard) => {
-  for (let r = 0; r < row; r++) {
-    actualBoard[r] = new Array(10);
-    for (let c = 0; c < col; c++) {
-      actualBoard[r][c] = newBoard[r][c];
-    }
-  }
-};
-
 const shoot = (x, y, board) => {
+  console.log(x, y, board);
   let shotted = board[x][y];
   if (shotted === 0) {
     board[x][y] = 2;
+    return false;
   } else if (shotted === 1) {
     board[x][y] = 3;
+    return true;
   }
-  return board;
+  return false;
 };
 
 module.exports = {
   boardA,
   boardB,
   shoot,
-  update
+  generateBoard
 };
