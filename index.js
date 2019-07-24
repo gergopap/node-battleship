@@ -13,8 +13,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 app.set('view engine', 'jade');
 
-MongoClient.connect(url, (err, client) => {
-  db = client.db('battleship');
+MongoClient.connect(url, async (err, client) => {
+  db = await client.db('battleship');
   if (err) return console.log(err);
   app.listen(3000, () => {
     console.log('Running on port on 3000...');
@@ -22,53 +22,49 @@ MongoClient.connect(url, (err, client) => {
   return db;
 });
 
-app.get('/boards/playerA', (req, res) => {
-  db.collection('boards').findOne({ "player": "A" })
-    .then((boardA) => { res.json(boardA.board) });
+app.get('/boards/playerA', async (req, res) => {
+  let boardA = await db.collection('boards').findOne({ "player": "A" });
+  res.json(boardA.board);
 });
 
-app.get('/boards/playerB', (req, res) => {
-  db.collection('boards').findOne({ "player": "B" })
-    .then((boardB) => { res.json(boardB.board) });
+app.get('/boards/playerB', async (req, res) => {
+  let boardB = await db.collection('boards').findOne({ "player": "B" });
+  res.json(boardB.board);
 });
 
-app.post('/boards/playerA/shoot', (req, res) => {
-  db.collection('boards').findOne({ "player": "B" })
-    .then((boardB) => {
-      let shotted = game.shoot(req.body.x, req.body.y, boardB.board);
-      db.collection('boards').updateOne(
-        { "player": "B" },
-        {
-          $set: {
-            "board": boardB.board
-          }
-        }).then(() => {
-          if (shotted) {
-            res.json({ "Was hit?": true });
-          } else {
-            res.json({ "Was hit?": false });
-          }
-        });
+app.post('/boards/playerA/shoot', async (req, res) => {
+  let boardB = await db.collection('boards').findOne({ "player": "B" });
+  let shotted = await game.shoot(req.body.x, req.body.y, boardB.board);
+  db.collection('boards').updateOne(
+    { "player": "B" },
+    {
+      $set: {
+        "board": boardB.board
+      }
+    }).then(() => {
+      if (shotted) {
+        res.json({ "Was hit?": true });
+      } else {
+        res.json({ "Was hit?": false });
+      }
     });
 });
 
-app.post('/boards/playerB/shoot', (req, res) => {
-  db.collection('boards').findOne({ "player": "A" })
-    .then((boardA) => {
-      let shotted = game.shoot(req.body.x, req.body.y, boardA.board);
-      db.collection('boards').updateOne(
-        { "player": "A" },
-        {
-          $set: {
-            "board": boardA.board
-          }
-        }).then(() => {
-          if (shotted) {
-            res.json({ "Was hit?": true });
-          } else {
-            res.json({ "Was hit?": false });
-          }
-        });
+app.post('/boards/playerB/shoot', async (req, res) => {
+  let boardA = await db.collection('boards').findOne({ "player": "A" })
+  let shotted = await game.shoot(req.body.x, req.body.y, boardA.board);
+  db.collection('boards').updateOne(
+    { "player": "A" },
+    {
+      $set: {
+        "board": boardA.board
+      }
+    }).then(() => {
+      if (shotted) {
+        res.json({ "Was hit?": true });
+      } else {
+        res.json({ "Was hit?": false });
+      }
     });
 });
 
