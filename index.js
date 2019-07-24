@@ -24,12 +24,18 @@ MongoClient.connect(url, async (err, client) => {
 
 app.get('/boards/playerA', async (req, res) => {
   let boardA = await db.collection('boards').findOne({ "player": "A" });
-  res.json(boardA.board);
+  res.json(boardA.board)
+    .catch(error => {
+      res.status(500).json({ error: error });
+    });
 });
 
 app.get('/boards/playerB', async (req, res) => {
   let boardB = await db.collection('boards').findOne({ "player": "B" });
-  res.json(boardB.board);
+  res.json(boardB.board)
+    .catch(error => {
+      res.status(500).json({ error: error });
+    });
 });
 
 app.post('/boards/playerA/shoot', async (req, res) => {
@@ -43,9 +49,15 @@ app.post('/boards/playerA/shoot', async (req, res) => {
       }
     }).then(() => {
       if (shotted) {
-        res.json({ "Was hit?": true });
+        res.json({ "Was hit?": true })
+          .catch(error => {
+            res.status(500).json({ error: error });
+          });
       } else {
-        res.json({ "Was hit?": false });
+        res.json({ "Was hit?": false })
+          .catch(error => {
+            res.status(500).json({ error: error });
+          });
       }
     });
 });
@@ -61,9 +73,15 @@ app.post('/boards/playerB/shoot', async (req, res) => {
       }
     }).then(() => {
       if (shotted) {
-        res.json({ "Was hit?": true });
+        res.json({ "Was hit?": true })
+          .catch(error => {
+            res.status(500).json({ error: error });
+          });
       } else {
-        res.json({ "Was hit?": false });
+        res.json({ "Was hit?": false })
+          .catch(error => {
+            res.status(500).json({ error: error });
+          });
       }
     });
 });
@@ -79,7 +97,10 @@ app.put('/boards/playerA', (req, res) => {
       }
     }).then(() =>
       db.collection('boards').findOne({ "player": "A" })
-        .then((boardA) => { res.json(boardA.board) }));
+        .then((boardA) => { res.json(boardA.board) }))
+    .catch(error => {
+      res.status(500).json({ error: error });
+    });
 });
 
 app.put('/boards/playerB', (req, res) => {
@@ -93,7 +114,10 @@ app.put('/boards/playerB', (req, res) => {
       }
     }).then(() =>
       db.collection('boards').findOne({ "player": "B" })
-        .then((boardB) => { res.json(boardB.board) }));
+        .then((boardB) => { res.json(boardB.board) }))
+    .catch(error => {
+      res.status(500).json({ error: error });
+    });
 });
 
 module.exports = app;

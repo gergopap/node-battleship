@@ -11,97 +11,96 @@ host: "localhost:3000"
 
 paths:
   /boards/playerA:
-    get: 
+    get:
       summary: "Get board A"
       description: "Shows board A"
       responses:
-        "200": 
+        "200":
           description: "successful operation"
-          schema: 
+          schema:
             $ref: "#/definitions/Board"
     put:
       summary: "Drop the old and reload board A with new elements"
       parameters:
-      - name: "update board"
-        in: "body"
-        required: true
-        schema: 
-          "$ref": "#/definitions/Board"
-      responses: 
-        200: 
+        - name: "update board"
+          in: "body"
+          required: true
+          schema:
+            "$ref": "#/definitions/Board"
+      responses:
+        200:
           description: "Successful operation"
-          schema: 
+          schema:
             "$ref": "#/definitions/Board"
 
   /boards/playerB:
-    get: 
+    get:
       summary: "Get board B"
       description: "Shows board B"
       responses:
-        200: 
+        200:
           description: "Successful operation"
     put:
       summary: "Drop the old and reload board B with new elements"
       parameters:
-      - name: "new board"
-        in: "body"
-        required: true
-        schema: 
-          "$ref": "#/definitions/Board"
-      responses: 
-        200: 
+        - name: "new board"
+          in: "body"
+          required: true
+          schema:
+            "$ref": "#/definitions/Board"
+      responses:
+        200:
           description: "Successful operation"
-          schema: 
+          schema:
             "$ref": "#/definitions/Board"
 
-
   /boards/playerA/shoot:
-    post: 
+    post:
       description: "Player shots at cell x:y on board B"
       parameters:
-      - name: "coordinates"
-        in: "body"
-        required: true
-        schema: 
-          type: "object"
-          properties: 
-            x:
-              type: "integer"
-            y:
-              type: "integer"
-      responses: 
-        200: 
-          description: "Successful operation returns hit or missed"
-          schema: 
+        - name: "coordinates"
+          in: "body"
+          required: true
+          schema:
             type: "object"
-            properties: 
+            properties:
+              x:
+                type: "integer"
+              y:
+                type: "integer"
+      responses:
+        200:
+          description: "Successful operation returns hit or missed"
+          schema:
+            type: "object"
+            properties:
               hit:
                 type: "boolean"
 
   /boards/playerB/shoot:
-    post: 
+    post:
       description: "Player shots at cell x:y on board A"
       parameters:
-      - name: "coordinates"
-        in: "body"
-        required: true
-        schema: 
-          type: "object"
-          properties: 
-            x:
-              type: "integer"
-            y:
-              type: "integer"
-      responses: 
+        - name: "coordinates"
+          in: "body"
+          required: true
+          schema:
+            type: "object"
+            properties:
+              x:
+                type: "integer"
+              y:
+                type: "integer"
+      responses:
         200:
           description: "Successful operation returns hit or missed"
-          schema: 
+          schema:
             type: "object"
-            properties: 
+            properties:
               hit:
                 type: "boolean"
 
-definitions: 
+definitions:
   Board:
     type: "array"
     items:
