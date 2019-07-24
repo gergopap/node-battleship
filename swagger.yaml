@@ -13,18 +13,18 @@ paths:
   /boards/playerA:
     get: 
       summary: "Get board A"
-	  description: "Shows board A"
-    responses:
-      200: 
-        description: "successful operation"
-        schema: 
-          $ref: "#/definitions/Board"
+      description: "Shows board A"
+      responses:
+        "200": 
+          description: "successful operation"
+          schema: 
+            $ref: "#/definitions/Board"
     put:
       summary: "Drop the old and reload board A with new elements"
       parameters:
-        name: "update board"
+      - name: "update board"
         in: "body"
-        required: true,
+        required: true
         schema: 
           "$ref": "#/definitions/Board"
       responses: 
@@ -36,34 +36,30 @@ paths:
   /boards/playerB:
     get: 
       summary: "Get board B"
-	    parameters:
-	    description: "Shows board B"
-        schema: 
-        $ref: "#/definitions/Board"
+      description: "Shows board B"
       responses:
         200: 
-	      description: "Successful operation"
-
+          description: "Successful operation"
     put:
       summary: "Drop the old and reload board B with new elements"
       parameters:
-        name: "new board",
-        in: "body",
-        required: true,
+      - name: "new board"
+        in: "body"
+        required: true
         schema: 
           "$ref": "#/definitions/Board"
-        responses: 
-          200: 
-            description: "Successful operation"
-            schema: 
-              "$ref": "#/definitions/Board"
+      responses: 
+        200: 
+          description: "Successful operation"
+          schema: 
+            "$ref": "#/definitions/Board"
 
 
   /boards/playerA/shoot:
     post: 
-      description: "Player shots at cell x:y on board A"
+      description: "Player shots at cell x:y on board B"
       parameters:
-        name: "coordinates"
+      - name: "coordinates"
         in: "body"
         required: true
         schema: 
@@ -84,9 +80,9 @@ paths:
 
   /boards/playerB/shoot:
     post: 
-      description: "Player shots at cell x:y on board B"
+      description: "Player shots at cell x:y on board A"
       parameters:
-        name: "coordinates"
+      - name: "coordinates"
         in: "body"
         required: true
         schema: 
@@ -97,7 +93,7 @@ paths:
             y:
               type: "integer"
       responses: 
-        200: 
+        200:
           description: "Successful operation returns hit or missed"
           schema: 
             type: "object"
@@ -105,15 +101,15 @@ paths:
               hit:
                 type: "boolean"
 
-  definitions: 
-    Board:
+definitions: 
+  Board:
+    type: "array"
+    items:
       type: "array"
       items:
-        type: "array"
-        items:
-          type: "integer"
-          enum:
-            - 0
-            - 1
-            - 2
-            - 3
+        type: "integer"
+        enum:
+          - 0
+          - 1
+          - 2
+          - 3
