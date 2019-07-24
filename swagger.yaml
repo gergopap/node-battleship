@@ -111,4 +111,9 @@ paths:
       items:
         type: "array"
         items:
-          type: "integer" //enumok legyenek
+          type: "integer"
+          enum:
+            - 0
+            - 1
+            - 2
+            - 3

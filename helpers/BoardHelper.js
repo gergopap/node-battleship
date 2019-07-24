@@ -2,11 +2,15 @@ const row = 10;
 const col = 10;
 
 const generateBoard = () => {
-  let array = new Array(row);
+  let arr = [];
   for (let r = 0; r < row; r++) {
-    array[r] = new Array(col);
+    arr.push([]);
+    arr[r].push(new Array(col));
+    for (var c = 0; c < col; c++) {
+      arr[r][c] = 0;
+    }
   }
-  return array;
+  return arr;
 };
 
 let boardA = generateBoard();
